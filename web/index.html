@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="zh-CN" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f4f7f8">
+  <meta name="description" content="EvoAgent · 多智能体代码审查、执行追踪与反馈演进工作台">
+  <title>EvoAgent · 代码审查工作台</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='12' fill='%230d9488'/%3E%3Cpath d='M27 11H13v18h14M13 20h11' fill='none' stroke='white' stroke-width='3.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="/assets/app.css?v=20261013.1">
+  <link rel="stylesheet" href="/assets/login.css?v=20261013.1">
+  <script src="/assets/app.js?v=20261013.1" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">跳转到主要内容</a>
+  <div class="app-shell" id="app-shell">
+    <button class="sidebar-scrim" id="sidebar-scrim" aria-label="关闭导航" hidden></button>
+    <aside class="sidebar" id="sidebar" aria-label="主导航">
+      <a class="brand" href="#overview" aria-label="EvoAgent 首页">
+        <span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 32 32"><path d="M23 7H9v18h14M9 16h11"/></svg></span>
+        <span class="brand-copy">EvoAgent<small>CODE REVIEW WORKSPACE</small></span>
+      </a>
+      <div class="workspace-label"><span class="workspace-dot"></span><span id="workspace-name">审查工作区</span><span class="workspace-tag">WORKSPACE</span></div>
+      <p class="nav-caption">工作台 <span>WORKSPACE</span></p>
+      <nav class="nav-list">
+        <button class="nav-item active" data-view="overview"><i data-icon="grid"></i><span>运行总览</span><span class="nav-arrow">↗</span></button>
+        <button class="nav-item" data-view="review"><i data-icon="plus-square"></i><span>发起审查</span></button>
+        <button class="nav-item" data-view="tasks"><i data-icon="layers"></i><span>任务中心</span><span class="nav-count" id="nav-task-count">—</span></button>
+        <button class="nav-item" data-view="skills"><i data-icon="sparkles"></i><span>Skills 能力库</span></button>
+        <button class="nav-item" data-view="evolution"><i data-icon="flask"></i><span>演进实验室</span></button>
+      </nav>
+      <div class="sidebar-note"><span class="note-icon" data-icon="git-branch"></span><strong>从一次变更开始。</strong><p>让证据支撑结论，让反馈成为下一次审查的经验。</p><button class="sidebar-new" data-jump="review">新建审查 <span>＋</span></button></div>
+      <div class="sidebar-foot"><span class="live-dot" id="service-dot" aria-hidden="true"></span><span><small>服务连接</small><b id="system-status">正在连接…</b></span><i data-icon="activity"></i></div>
+    </aside>
+    <main id="main-content" tabindex="-1">
+      <header class="topbar">
+        <div class="topbar-left"><button class="icon-button mobile-menu" id="menu-toggle" aria-label="打开导航" aria-expanded="false" aria-controls="sidebar"><i data-icon="menu"></i></button><div class="breadcrumb"><span>工作台</span><b>/</b><h1 id="page-title">运行总览</h1></div></div>
+        <div class="top-actions"><span class="last-synced" id="last-synced">等待同步</span><button class="icon-button" id="refresh" title="刷新当前数据" aria-label="刷新当前数据"><i data-icon="refresh"></i></button><button class="icon-button" id="theme-toggle" title="切换深色外观" aria-label="切换深色外观"><i data-icon="moon"></i></button><div class="topbar-divider"></div><button class="user-chip hidden" id="logout" title="退出登录"><span class="avatar" id="user-avatar">EA</span><span id="user-name">管理员</span><i data-icon="log-out"></i></button><span class="local-user hidden" id="local-user">本地模式</span></div>
+      </header>
+      <div class="page-content">
+        <div class="connection-banner hidden" id="connection-banner" role="status"></div>
+        <section class="view active" id="view-overview" aria-labelledby="page-title">
+          <div class="section-heading"><div><p class="eyebrow">OVERVIEW <span>/ 01</span></p><h2>把每一次审查，变成下一次进步。</h2><p>代码变更、审查证据与反馈演进，在这里连接。</p></div><button class="button primary" data-jump="review"><i data-icon="plus"></i>新建 PR 审查</button></div>
+          <div class="hero">
+            <div class="hero-copy"><span class="hero-label"><span></span>多智能体协作 · 证据驱动</span><h2>看见风险。<br><em>也看见它的依据。</em></h2><p>Lead 分配任务，Worker 寻找证据，Critic 质疑结论。每一步执行都留下可追溯的记录。</p><button class="hero-link" data-jump="tasks">探索审查记录 <i data-icon="arrow-right"></i></button><div class="hero-footnote"><i data-icon="shield"></i>质量门禁守住结论，反馈推动持续改进</div></div>
+            <div class="hero-visual" aria-label="Lead 向 Security 和 Correctness 分配任务，再由 Critic 复核的协作示意，不代表当前运行状态">
+              <div class="diagram-grid"></div><span class="diagram-label">COLLABORATION MAP</span>
+              <svg class="flow-wires" viewBox="0 0 530 290" fill="none" aria-hidden="true"><path d="M119 144H219M308 144H339V74H370M308 144H339V213H370M425 97V190"/><circle r="3" cx="172" cy="144"/><circle r="3" cx="339" cy="112"/><circle r="3" cx="339" cy="183"/></svg>
+              <div class="flow-node flow-input"><i data-icon="git-pull-request"></i><span>代码变更<small>PR DIFF</small></span></div>
+              <div class="flow-core"><i data-icon="command"></i><strong>Lead</strong><small>任务编排</small><span class="core-halo"></span></div>
+              <div class="flow-node flow-security"><i data-icon="shield"></i><span>Security<small>安全审查</small></span></div>
+              <div class="flow-node flow-correctness"><i data-icon="check-circle"></i><span>Correctness<small>正确性与可靠性</small></span></div>
+              <span class="critic-chip"><i data-icon="scan"></i>Critic · 独立复核</span>
+            </div>
+          </div>
+          <div class="stats" id="stats" aria-live="polite"><div class="stat skeleton"></div><div class="stat skeleton"></div><div class="stat skeleton"></div><div class="stat skeleton"></div><div class="stat skeleton"></div><div class="stat skeleton"></div></div>
+          <div class="dashboard-grid">
+            <article class="panel"><div class="panel-head"><div><span class="section-kicker">ACTIVITY</span><h3>最近的审查任务</h3></div><button class="link-button" data-jump="tasks">查看全部 <i data-icon="arrow-up-right"></i></button></div><div class="list-table-head"><span>仓库 / 任务</span><span>状态</span></div><div id="recent-tasks" class="task-list"><div class="list-loading skeleton"></div><div class="list-loading skeleton"></div></div></article>
+            <article class="panel runtime-panel"><div class="panel-head"><div><span class="section-kicker">RUNTIME</span><h3>执行链与模型配置</h3></div><span class="pill neutral" id="runtime-pill">检查中</span></div><div class="agent-flow" id="execution-chain"><div class="agent-step" id="llm-agent-step"><span class="step-number">01</span><span><strong>读取模型配置</strong><small id="llm-agent-detail">正在连接服务</small></span><em id="llm-agent-state">—</em></div></div><p class="panel-note">这里显示执行架构；单次任务的实际调用见任务报告。</p></article>
+          </div>
+        </section>
+
+        <section class="view" id="view-review" aria-labelledby="page-title">
+          <div class="section-heading"><div><p class="eyebrow">NEW REVIEW <span>/ 02</span></p><h2>把变更交给审查，把注意力留给创造。</h2><p>直接提交 Unified Diff；无需先连接完整仓库。</p></div><span class="pill accent-soft"><i data-icon="git-pull-request"></i>手动提交</span></div>
+          <div class="form-layout">
+            <article class="panel form-panel"><div class="panel-head"><div><span class="section-kicker">INPUT</span><h3>代码变更</h3></div><span class="muted">仅提交需要审查的内容</span></div>
+              <form id="review-form"><div class="field-row"><label>仓库标识 <span class="required">*</span><input name="repository" placeholder="owner/repository" autocomplete="off" maxlength="250" required><small class="field-hint">用于归档；手动模式不会自动克隆这个仓库。</small></label><label>PR 编号 <span class="optional">可选</span><input name="pull_request" type="number" min="1" step="1" placeholder="例如 42"><small class="field-hint">没有真实 PR 时留空。</small></label></div><label>运行模式<select name="mode" id="review-mode"><option value="agentic">Agentic · 四角色协作审查</option></select></label>
+              <div class="editor-label"><label for="diff-input">Unified Diff <span class="required">*</span></label><div><button class="link-button" id="sample-diff" type="button">载入示例</button><span class="field-meta" id="diff-stats">0 行 · 0 字符</span></div></div>
+              <div class="code-editor"><div class="editor-chrome"><span class="editor-dot"></span><span class="editor-dot"></span><span class="editor-dot"></span><span>changes.diff</span><span>UTF-8</span></div><textarea id="diff-input" name="diff" rows="15" spellcheck="false" required placeholder="diff --git a/app.py b/app.py&#10;--- a/app.py&#10;+++ b/app.py&#10;@@ -1 +1 @@&#10;-old_value&#10;+new_value" aria-describedby="diff-stats"></textarea></div>
+              <div class="form-footer"><label class="check"><input name="async" type="checkbox" checked><span>异步审查<small>提交后在任务中心跟踪进度</small></span></label><button class="button primary" type="submit"><i data-icon="play"></i>开始代码审查</button></div><p class="form-hint" id="review-model-hint">代码会发送给当前配置的模型服务，请勿提交密钥。</p></form>
+            </article>
+            <aside class="review-aside"><article class="panel strategy-panel"><span class="section-kicker">HOW IT WORKS</span><h3>一份 Diff，会经历什么？</h3><ol class="strategy-list"><li><b>01</b><span><strong>解析变更</strong><small>提取变更文件与新增代码行。</small></span></li><li><b>02</b><span><strong>协作审查</strong><small>Lead 委派任务，Worker 提供证据，Critic 复核候选。</small></span></li><li><b>03</b><span><strong>验证与筛选</strong><small>格式、证据、置信度与发布门禁。</small></span></li><li><b>04</b><span><strong>报告与反馈</strong><small>查看结论；你的反馈可进入后续演进评测。</small></span></li></ol></article><article class="panel result-panel"><div class="panel-head"><h3>提交结果</h3><i data-icon="terminal"></i></div><div id="review-result" class="result empty" aria-live="polite">提交后，这里会显示任务编号与状态。</div></article></aside>
+          </div>
+        </section>
+
+        <section class="view" id="view-tasks" aria-labelledby="page-title">
+          <div class="section-heading"><div><p class="eyebrow">REVIEW HISTORY <span>/ 03</span></p><h2>每个结论，都有迹可循。</h2><p>从执行状态到代码证据，查看一次审查的完整过程。</p></div><button class="button secondary" data-jump="review"><i data-icon="plus"></i>发起审查</button></div>
+          <div class="tasks-layout">
+            <article class="panel task-browser"><div class="panel-head"><h3>任务列表 <span class="count-label" id="task-count">—</span></h3><label class="sr-only" for="task-limit">加载任务数量</label><select class="compact-select" id="task-limit"><option value="50">最近 50 条</option><option value="100">最近 100 条</option><option value="200">最近 200 条</option></select></div><div class="task-filters"><label class="search-input"><i data-icon="search"></i><input id="task-search" type="search" placeholder="搜索仓库、PR 或任务编号" aria-label="搜索已加载的任务"></label><div class="filter-row"><label for="task-state-filter">筛选状态</label><select id="task-state-filter"><option value="">全部状态</option><option value="ACTIVE">进行中</option><option value="SUCCESS">已完成</option><option value="FAILED">失败</option><option value="CANCELLED">已取消</option></select></div></div><div id="all-tasks" class="task-list"><div class="list-loading skeleton"></div></div><p class="list-footnote" id="task-list-note">仅在已加载的最近任务中筛选。</p></article>
+            <article class="panel report-panel"><div class="panel-head"><div><span class="section-kicker">INSPECTOR</span><h3>任务报告</h3></div><div class="report-actions"><button class="icon-button hidden" id="copy-report" aria-label="复制完整报告 JSON" title="复制完整报告 JSON"><i data-icon="copy"></i></button><button class="icon-button hidden" id="download-report" aria-label="导出完整报告 JSON" title="导出完整报告 JSON"><i data-icon="download"></i></button><button class="button danger small hidden" id="create-fix"><i data-icon="wrench"></i>创建修复分支</button></div></div>
+              <div id="task-overview" class="task-overview"><div class="empty-state large"><span class="empty-icon" data-icon="file-search"></span><h3>选择一个任务，展开它的故事。</h3><p>左侧选择任务，查看结论、执行过程与原始报告。</p></div></div>
+              <div class="report-tabs hidden" id="report-tabs" role="tablist" aria-label="报告视图"><button id="tab-findings" role="tab" aria-selected="true" aria-controls="report-findings" data-report-tab="findings">审查结论</button><button id="tab-execution" role="tab" aria-selected="false" aria-controls="report-execution" data-report-tab="execution" tabindex="-1">执行过程</button><button id="tab-json" role="tab" aria-selected="false" aria-controls="report-json" data-report-tab="json" tabindex="-1">原始 JSON</button></div>
+              <div class="report-tab-content hidden" id="report-findings" role="tabpanel" aria-labelledby="tab-findings"></div><div class="report-tab-content hidden" id="report-execution" role="tabpanel" aria-labelledby="tab-execution"></div><div class="report-tab-content hidden" id="report-json" role="tabpanel" aria-labelledby="tab-json"><div class="json-toolbar"><button class="button secondary small" id="copy-json" type="button" aria-label="复制原始 JSON"><i data-icon="copy"></i>复制 JSON</button></div><pre id="task-report" class="json-code" tabindex="0">请选择一个任务。</pre></div>
+              <div id="fix-result" class="hidden"></div>
+              <section class="feedback-panel hidden" id="feedback-panel" aria-labelledby="feedback-title"><div class="feedback-head"><div><span class="section-kicker">HUMAN IN THE LOOP</span><h3 id="feedback-title">让这次审查更有价值。</h3><p>标记误报、漏报或坏修复，给后续评测留下依据。</p></div><span class="pill accent-soft">仅本任务</span></div><form id="feedback-form"><div class="field-row feedback-fields"><label>反馈类型<select name="category" id="feedback-category"><option value="false_positive">误报 · 不应该报告的问题</option><option value="missed_issue">漏报 · 应该发现的问题</option><option value="bad_fix">坏修复 · 修复建议有误</option></select></label><label>关联结论 <span class="optional">可选</span><select name="finding_index" id="feedback-finding"><option value="">不关联已有结论</option></select></label></div><div class="feedback-missed-fields hidden" id="feedback-missed-fields"><p class="field-hint">补充漏报的位置与规则，帮助后续评测定位。</p><div class="feedback-location-fields"><label>规则 ID<input name="rule_id" placeholder="例如 correctness-division-by-zero"></label><label>文件路径<input name="path" placeholder="例如 app/api.py"></label><label>行号<input name="line" type="number" min="1" step="1" placeholder="42"></label></div></div><label>判断依据 <span class="required">*</span><textarea name="note" rows="3" maxlength="2000" required placeholder="描述预期行为、实际问题，或修复建议为何不合适。"></textarea></label><div class="form-footer"><span class="form-hint" id="feedback-hint">反馈将被保存，不会立即改变线上审查行为。</span><button class="button primary small" type="submit">提交反馈 <i data-icon="arrow-right"></i></button></div></form><div id="feedback-result" class="feedback-result" role="status"></div><div id="task-feedback-history" class="feedback-history"></div></section>
+            </article>
+          </div>
+        </section>
+
+        <section class="view" id="view-skills" aria-labelledby="page-title">
+          <div class="section-heading"><div><p class="eyebrow">CAPABILITIES <span>/ 04</span></p><h2>专业分工，让审查不止于发现。</h2><p>区分审查组件与按需加载的 Agent Skills，查看来源与权限。</p></div><button class="button secondary" id="reload-skills"><i data-icon="refresh"></i>重新扫描 Skills</button></div>
+          <article class="llm-capability panel" id="llm-capability"><div class="llm-capability-main"><span class="capability-glyph" data-icon="cpu"></span><div><span class="section-kicker">MODEL RUNTIME</span><h3>多角色 LLM 审查</h3><p id="llm-capability-detail">正在读取模型配置…</p></div></div><div class="capability-runtime"><span class="pill neutral" id="llm-runtime-status">检查中</span><strong id="llm-runtime-model">Provider 未知</strong></div></article>
+          <div class="section-subhead"><div><h3>已注册能力 <span class="count-label" id="skill-count">—</span></h3><p>Skills 为提示词能力包；审查组件保留后端注册分类，具体能力以描述为准。</p></div><div class="skill-filters"><label class="search-input"><i data-icon="search"></i><input id="skill-search" type="search" placeholder="搜索能力名称或描述" aria-label="搜索能力"></label><select id="skill-kind" aria-label="能力类型"><option value="">全部类型</option><option value="agent-skill">Agent Skill</option><option value="scanner">Reviewer / Scanner</option></select></div></div>
+          <div class="cards" id="skill-list"><div class="skill-card skeleton"></div><div class="skill-card skeleton"></div><div class="skill-card skeleton"></div></div>
+        </section>
+
+        <section class="view" id="view-evolution" aria-labelledby="page-title">
+          <div class="section-heading"><div><p class="eyebrow">EVOLUTION LAB <span>/ 05</span></p><h2>把反馈，变成经过验证的改进。</h2><p>Prompt 演进：用正式多 Agent 流程回放候选，门禁与复测通过后激活，可回滚。</p></div><div class="publication-actions"><button class="button secondary" id="rollback-prompt" type="button">回滚当前 Prompt</button><button class="button primary" id="auto-evolve"><i data-icon="sparkles"></i>从反馈生成候选</button></div></div>
+          <article class="evolution-purpose"><div><span>01</span><strong>收集反馈</strong><small>误报、漏报与坏修复</small></div><i data-icon="arrow-right"></i><div><span>02</span><strong>构建候选</strong><small>提示词版本化</small></div><i data-icon="arrow-right"></i><div><span>03</span><strong>回放验证</strong><small>Validation 与 Holdout 门禁</small></div><i data-icon="arrow-right"></i><div><span>04</span><strong>验证后激活</strong><small>保存基线，支持回滚</small></div></article>
+          <article class="panel evolution-status-panel"><div class="panel-head"><div><span class="section-kicker">READINESS</span><h3>评测就绪状态</h3></div><span class="pill neutral" id="evolution-ready">检查中</span></div><div id="evolution-metrics" class="evolution-metrics"></div><details class="raw-details"><summary>查看完整评测配置</summary><pre id="evolution-status" class="json-code" tabindex="0">正在读取…</pre></details></article>
+          <div class="evolution-grid"><article class="panel form-panel"><div class="panel-head"><div><span class="section-kicker">CANDIDATE</span><h3>提交候选提示词</h3></div><i data-icon="flask"></i></div><form id="evolution-form"><label>Prompt 版本组<input name="skill_name" value="llm-review" maxlength="120" required></label><label>候选提示词<textarea name="prompt" rows="12" spellcheck="false" maxlength="12000" class="prompt-editor" required>Review the unified diff. Return JSON findings with severity, fix and test. Report only actionable defects introduced by added lines.</textarea></label><p class="form-hint">llm-review 使用正式多 Agent 回放；达到提升门槛并通过复测后自动激活。其他命名空间仍只做离线实验。</p><button class="button primary" type="submit"><i data-icon="play"></i>运行新旧版本回放评测</button></form></article><article class="panel"><div class="panel-head"><div><span class="section-kicker">FEEDBACK & RUNS</span><h3>失败案例与评测记录</h3></div></div><div id="failure-list"></div><div id="evolution-result" class="result empty" aria-live="polite">评测结果将在这里显示。</div></article></div>
+        </section>
+        <footer class="page-footer"><span>EvoAgent <b>·</b> Evidence before confidence.</span><span>审查辅助工具 · 关键修改仍需人工确认</span></footer>
+      </div>
+    </main>
+  </div>
+  <div class="login-overlay hidden" id="login-overlay" role="dialog" aria-modal="true" aria-labelledby="login-title">
+    <div class="login-scene"><div class="login-art"><span class="login-eyebrow">EVOLVE WITH EVERY REVIEW</span><h2>更好的代码，<br>从更有依据的<br><em>审查开始。</em></h2><p>连接代码、证据与经验。<br>让每一次审查都成为团队可以积累的能力。</p><div class="login-orbit" aria-hidden="true"><span class="login-orbit-ring"></span><span class="login-orbit-ring"></span><span class="login-orbit-core">E</span><b class="login-tag-one">Evidence</b><b class="login-tag-two">Review</b><b class="login-tag-three">Evolve</b></div><span class="login-art-foot">EvoAgent / Review workspace</span></div>
+      <form class="login-card" id="login-form"><div class="login-brand"><span class="brand-mark"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M23 7H9v18h14M9 16h11"/></svg></span><span>EvoAgent<small>WELCOME TO YOUR WORKSPACE</small></span></div><h2 id="login-title">欢迎回到工作台</h2><p class="login-lead">使用工作区凭据，继续你的下一次审查。</p><label>用户名<input name="username" autocomplete="username" required placeholder="输入用户名"></label><label>密码<span class="password-field"><input name="password" type="password" autocomplete="current-password" required placeholder="输入密码"><button type="button" class="icon-button" id="toggle-password" aria-label="显示密码"><i data-icon="eye"></i></button></span></label><label>租户 ID <span class="optional">可选</span><input name="tenant_id" placeholder="仅有一个租户时可留空" autocomplete="off"></label><p class="login-error" id="login-error" role="alert"></p><button class="button primary login-submit" type="submit">登录工作台 <i data-icon="arrow-right"></i></button><p class="login-security"><i data-icon="lock"></i>本页面不需要模型密钥或 GitHub Token</p></form>
+    </div>
+  </div>
+  <dialog class="confirm-dialog" id="confirm-dialog" aria-labelledby="confirm-title"><div class="confirm-icon" data-icon="shield"></div><h2 id="confirm-title">确认操作</h2><p id="confirm-message"></p><div class="dialog-actions"><button class="button secondary" id="confirm-cancel">取消</button><button class="button primary" id="confirm-ok">确认</button></div></dialog>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <noscript><div class="noscript-notice">此工作台需要启用 JavaScript 才能登录和操作。</div></noscript>
+</body>
+</html>

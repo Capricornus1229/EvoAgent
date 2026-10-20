@@ -1,0 +1,25 @@
+__pycache__/
+*.py[cod]
+*.db
+.env
+.pytest_cache/
+
+
+*.db-*
+*.sqlite
+*.sqlite3
+*.sqlite-*
+*.sqlite3-*
+.env.*
+!.env.example
+.venv/
+venv/
+backups/
+db_backups/
+*.zip
+*.pem
+*.key
+*.log
+
+# Personal working transcripts are not public project source.
+ChatGPT-project-*.md

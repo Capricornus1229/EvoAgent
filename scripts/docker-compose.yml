@@ -1,0 +1,3 @@
+# Compatibility entrypoint; all services are defined in the project root.
+include:
+  - ../docker-compose.yml
